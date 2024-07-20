@@ -1,0 +1,84 @@
+import discord
+from discord.ext import commands
+from bot_logic import gen_pass
+import random
+import os
+import requests
+print(os.listdir('images'))
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
+
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Привет! Я бот эксперементатор {bot.user}!')  
+
+@bot.command()
+async def пока(ctx):
+    await ctx.send(f'заходи сюда ещё {bot.user}!')
+
+@bot.command()
+async def password(ctx):
+    await ctx.send(gen_pass(10))
+
+@bot.command()
+async def экология(ctx):
+    await ctx.send(f'защищай и береги природу {bot.user}!')
+
+
+@bot.command()
+async def пластик(ctx):
+    await ctx.send(f' из пластика можно делать футболки, ткань, заново сделать бутылки и игрушки.Пластик разлогается 1000 лет.Сортировка отходов не экологичные выбрасываем в урну или отдаём на переработку а экологичные можно выкинуть на улице.это всё факт о пластике {bot.user}!')
+
+@bot.command()
+async def бумага(ctx):
+    await ctx.send(f'а вы знаи что школьник из украины нашёл способ делать бумагу из павших листьев{bot.user}!')
+
+@bot.command()
+async def мусор(ctx):
+    await ctx.send(f'если вы хотите как то помочь природе то можете в ступить в команду экологов которые ходят по городам и лесам,собирают мусор и спасают животных{bot.user}!')
+
+@bot.command()
+async def факт(ctx):
+    await ctx.send(f'в мире есть целый остров из мусора и пластика{bot.user}!')
+
+
+
+@bot.command()
+async def mem(ctx):
+    img_name = random.choice(os.listdir('images'))
+    with open(f'images/{img_name}', 'rb') as f:
+        
+       picture = discord.File(f)
+   
+    await ctx.send(file=picture)
+
+def get_duck_image_url():    
+    url = 'https://random-d.uk/api/random'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+@bot.command('duck')
+async def duck(ctx):
+    '''По команде duck вызывает функцию get_duck_image_url'''
+    image_url = get_duck_image_url()
+    await ctx.send(image_url)
+
+
+@bot.command()
+async def cat(ctx):
+    animals_name = random.choice(os.listdir('animals'))
+    with open(f'animals/{animals_name}','rb') as f:
+
+      picture = discord.file(f)
+
+    await ctx.send(file=picture)
+
+
